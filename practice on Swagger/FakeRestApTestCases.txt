@@ -1,0 +1,93 @@
+-----------------------------------------------------------------------------------
+Explore and practice on the Swagger online website via Authors section.
+-----------------------------------------------------------------------------------
+
+method :GET
+baseUrl: http:/fakerestapi.azurewebsites.net
+Url: api/v1/Authors	
+
+Description: check respone status code
+API :GET / Url
+Test Case : response should be 200 OK.
+Expected Result: 200 OK
+Actual Result: 200 Ok 
+Status: Pass
+
+Description: Check respone objects if contain ,id ,idBook,firstName,lastName
+API :GET / Url
+Test Case : Check objects inside response
+Expected Result: {'id','idBook','firstName','lastName'}
+Actual Result: {'id','idBook','firstName','lastName'}
+Status: Pass
+
+----------------------------------------------------------------------------------
+
+method : POST
+baseUrl: http:/fakerestapi.azurewebsites.net
+Url: api/v1/Authors	
+
+
+Description : Check creation of  new Author is valid or not
+API :POST / Url
+Test Case : response should be 201 Created.
+Expected Result: 201 Created
+Actual Result: 200 Ok
+Status: Fail
+
+Description : check if 'firstName' OR 'lastName' is massing 
+API :POST / Url
+Test Case : response should be 400 Bad Rquuest .
+Expected Result: 400 Bad Request
+Actual Result: 400 Bad Request 
+Status: Pass
+
+Description : check the existence of 'first name' and 'last name'
+API :POST / Url
+Test Case : response should be 200 Ok.
+Expected Result: 200 OK
+Actual Result: 200 Ok
+Status: Pass
+
+-----------------------------------------------------------------------------------
+
+method : GET
+baseUrl: http:/fakerestapi.azurewebsites.net
+Url: /api/v1/Authors/authors/books/{idBook}
+
+
+Description : Searching with valid idBook 
+API :GET / Url
+Test Case : body should contain idBook =='Entered number by user'.
+Expected Result: 200 Ok
+Actual Result: 200 Ok
+Status: Pass
+
+-----------------------------------------------------------------------------------
+
+method : PUT
+baseUrl: http:/fakerestapi.azurewebsites.net
+Url: /api/v1/Authors/{id}
+
+
+Description : Author's data is updated successfully.
+API :PUT /Url
+Test Case : Auther's data updated successfully.
+Expected Result: 200 Ok
+Actual Result: 200 Ok
+Status: Pass
+
+-----------------------------------------------------------------------------------
+
+method :GET
+baseUrl: http:/fakerestapi.azurewebsites.net
+Url: /api/v1/Authors/{id}
+
+Description: check if 'firstName ' AND 'lastName' updated successfully.
+API :GET / Url
+Test Case : response should be 200 OK.
+Expected Result: new (firstName ,lastName)
+Actual Result: old(firstName,lastName)
+Status: Fail
+
+
+
