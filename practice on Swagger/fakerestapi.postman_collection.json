@@ -19,43 +19,47 @@
 									"// used variables\r",
 									"var responebody=pm.response.json();// to get response data\r",
 									"var responeBodyLength=pm.response.json().length;// to get response length\r",
+									"var randomNum=Math.floor(Math.random()*responeBodyLength);\r",
+									"// change id every Run to check with many numbers of ids\r",
+									"pm.environment.set(\"id\", randomNum.toString());\r",
+									"\r",
 									"\r",
 									"\r",
 									"\r",
 									"//  check respone status code\r",
-									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.test(\"Status code is 200\",  ()=> {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
 									"// check respone status to be Ok\r",
-									"pm.test(\"response Status is OK\", function () {\r",
+									"pm.test(\"response Status is OK\",  ()=> {\r",
 									"    pm.response.to.be.ok;\r",
 									"});\r",
 									"\r",
 									"// check responeSize \r",
-									"pm.test(\"response size in range\", function () {\r",
+									"pm.test(\"response size in range\",  ()=> {\r",
 									"    pm.expect(pm.response.responseSize).to.be.within(40000,50000);\r",
 									"});\r",
 									"\r",
 									"//check responeTime\r",
-									"pm.test(\"Response time is less than 200ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(250);\r",
+									"pm.test(\"Response time is less than 200ms\",  ()=> {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(290);\r",
 									"});\r",
 									"\r",
 									"// check response body contain id ,idBook ,firstName,lastName\r",
-									"pm.test(\"check response body\", function () {\r",
+									"pm.test(\"check response body\",  ()=> {\r",
 									"for(var i =0;i<responeBodyLength;++i){\r",
 									"    pm.expect(responebody[i]).to.have.all.keys('id','idBook','firstName','lastName');\r",
 									"}\r",
 									"})\r",
 									"\r",
 									"// check if response header contain content type \r",
-									"pm.test(\"Content-Type is present\", function () {\r",
+									"pm.test(\"Content-Type is present\",  ()=> {\r",
 									"    pm.response.to.have.header(\"Content-Type\");\r",
 									"});\r",
 									"\r",
 									"//check if response content type header is json\r",
-									"pm.test(\"Content-Type is json \", function () {\r",
+									"pm.test(\"Content-Type is json \",  ()=> {\r",
 									"    console.log(pm.response.headers.get('Content-type'))\r",
 									"    pm.expect(pm.response.headers.get('Content-Type')).to.includes('application/json')\r",
 									"});\r",
@@ -107,25 +111,20 @@
 									"var responebody=pm.response.json();// to get response data\r",
 									"var id =(Number)(pm.environment.get(\"id\"));\r",
 									"\r",
+									"\r",
+									"\r",
 									"// check response code \r",
-									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.test(\"Status code is 200\", ()=> {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"// search with valid author id\r",
-									"pm.test(\"search by author id\", function () {\r",
-									"    pm.expect(pm.response.json().id).to.be.eql(id);\r",
+									"\r",
+									"pm.test(\"check Status to be Ok\", ()=> {\r",
+									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"// search with unvalid author id\r",
-									"pm.test(\"search by author id\", function () {\r",
-									"    pm.expect(pm.response.json().id).to.be.eql(-1);\r",
-									"});\r",
 									"\r",
-									"// search with about updated author first name and last name  \r",
-									"/*pm.test(\"check updated first&last name\", function () {\r",
-									"    pm.expect(pm.response.json().firstName).to.be.eql('mostafa');\r",
-									"    pm.expect(pm.response.json().lastName).to.be.eql('labib');\r",
-									"});*/\r",
+									"\r",
+									"\r",
 									"\r",
 									"\r",
 									"\t\t\t\t\t\t\t\t\r",
@@ -147,9 +146,16 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{BaseUrl}}/api/v1/Authors/{{id}}",
 							"host": [
@@ -186,6 +192,16 @@
 									"var idBook=Number(idBook); //casting returned String into Number\r",
 									"var responebody=pm.response.json();// to get response data\r",
 									"var responseBodyLength=pm.response.json().length;\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", ()=> {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check Status to be Ok\", ()=> {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
 									"\r",
 									"//searching with idBook 25\r",
 									"pm.test('search author id book',()=>{\r",
@@ -227,6 +243,48 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetInvalidAuthor(s)Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"// search with unvalid author id\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/Authors/:-1",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Authors",
+								":-1"
+							],
+							"variable": [
+								{
+									"key": "-1",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -242,15 +300,21 @@
 								"exec": [
 									"//used variables\r",
 									"\r",
-									"\r",
-									"pm.test(\"Status code is 200\", function () {\r",
+									"//check status code \r",
+									"pm.test(\"Status code is 200\", ()=> {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"console.log(pm.response.json());\r",
+									"\r",
+									"pm.test(\"check Status to be Ok\", ()=> {\r",
+									"    pm.response.to.have.status('OK');\r",
+									"});\r",
+									"\r",
 									"//firstname & lastname should be mandatory\r",
-									"pm.test(\"check existance of firstname and lastname\", function () {\r",
-									"    pm.expect(pm.response.json()).to.have.any.keys('firstName',\"lastName\");\r",
-									"});"
+									"pm.test(\"check existance of firstname and lastname\", ()=> {\r",
+									"    pm.expect(pm.response.json()).to.have.any.key('firstName',\"lastName\");\r",
+									"});\r",
+									"\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -261,7 +325,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": 156,\r\n  \"idBook\": 25,\r\n  \"firstName\": \"mostafa\",\r\n  \"lastName\": \"labib\"\r\n}",
+							"raw": "{\r\n  \"id\": 156,\r\n  \"idBook\": 54,\r\n  \"firstName\": \"mostafa\",\r\n  \"lastName\": \"Labib\"\r\n}\r\n\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,9 +348,145 @@
 				},
 				{
 					"name": "UpdateAuthor(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//used variables\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", ()=> {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check Status to be OK\", ()=> {\r",
+									"    pm.response.to.have.status('OK');\r",
+									"});\r",
+									"console.log(pm.response.json().firstName);\r",
+									"pm.test(\"check update of (firstname and lastname)\", ()=> {\r",
+									"    pm.expect(pm.response.json().firstName).to.eql('mostafa');\r",
+									"    pm.expect(pm.response.json().lastName).to.eql('Labib');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 156,\r\n  \"idBook\": 54,\r\n  \"firstName\": \"mostafa\",\r\n  \"lastName\": \"Labib\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/Authors/{{id}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Authors",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateUnvalidAuthor(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"//check if firstname or last name missing\r",
+									"pm.test(\"Status code is 400\", ()=> {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\":0,\r\n  \"idBook\": 0,\r\n  \"firstName\":\"string\" ,\r\n  \"lastName\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/Authors",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DeleteAuthor(s)",
+			"item": [
+				{
+					"name": "DeleteAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\",()=> {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check Status to be OK\", ()=> {\r",
+									"    pm.response.to.have.status('OK');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/Authors/{{id}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Authors",
+								"{{id}}"
+							]
+						}
 					},
 					"response": []
 				}
