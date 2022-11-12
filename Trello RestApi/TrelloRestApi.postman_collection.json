@@ -19,6 +19,8 @@
 									"//used variables\r",
 									"var responseBody=pm.response.json();\r",
 									"\r",
+									"\r",
+									"\r",
 									"pm.test(\"Response time is less than 600ms\", function () {\r",
 									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
 									"});\r",
@@ -34,8 +36,6 @@
 									"    canBePublic is true\r",
 									"    canInvite is true\r",
 									"}*/\r",
-									"\r",
-									"\r",
 									"console.log(responseBody);\r",
 									"pm.test(\"verify the most important parameters\", function () {\r",
 									"    pm.expect(responseBody.prefs.permissionLevel).to.be.eql(\"private\");\r",
@@ -99,15 +99,17 @@
 									"var responseBody=pm.response.json().boards;\r",
 									"FirstBoardID=responseBody[0].id;\r",
 									"LastBoardID = responseBody[responseBody.length - 1].id;\r",
-									"console.log(responseBody.length);\r",
 									"pm.environment.set(\"FirstBoardID\", FirstBoardID);\r",
 									"pm.environment.set(\"LastBoardID\", LastBoardID);\r",
+									"\r",
+									"\r",
+									"\r",
 									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"\r",
+									"//varify the number of boards more than one board\r",
 									"pm.test(\"verify that the number of boards greater than 1\", function () {\r",
 									"    pm.expect(responseBody.length).to.be.above(1);\r",
 									"});"
@@ -148,6 +150,69 @@
 					"response": []
 				},
 				{
+					"name": "Get Lists on a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//uesd variables\r",
+									"var responseBody=pm.response.json();\r",
+									"FirstListID=responseBody[0].id;\r",
+									"LastListID = responseBody[responseBody.length - 1].id;\r",
+									"pm.environment.set(\"FirstListID\", FirstListID);\r",
+									"pm.environment.set(\"LastListID\", LastListID);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//verify that the number of lists in the response is 5\r",
+									"pm.test(\"verify that the number of lists\", function () {\r",
+									"    pm.expect(responseBody.length).to.be.eql(3);\r",
+									"});\r",
+									"\r",
+									"//verify that the number of lists in the response is above 2\r",
+									"pm.test(\"verify that the number of lists is above 2\", function () {\r",
+									"    pm.expect(responseBody.length).to.be.above(2);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/boards/{{FirstBoardID}}/lists?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								"{{FirstBoardID}}",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete a Board",
 					"event": [
 						{
@@ -155,12 +220,14 @@
 							"script": {
 								"exec": [
 									"//used variable\r",
-									"var responseBody=pm.response.json().boards;\r",
+									"var responseBody=pm.response.json();\r",
+									"\r",
+									"\r",
 									"\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"console.log(responseBody._value);\r",
+									"\r",
 									"//varify that board is removed successfully\r",
 									"pm.test(\"board is removed successfully\", function () {\r",
 									"    pm.expect(responseBody._value).to.contain(\"board is removed successfully\");\r",
@@ -175,14 +242,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/1/boards/636fc60fabe6480186a133e2?key={{key}}&token={{token}}",
+							"raw": "{{baseUrl}}/1/boards/{{FirstBoardID}}?key={{key}}&token={{token}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"1",
 								"boards",
-								"636fc60fabe6480186a133e2"
+								"{{FirstBoardID}}"
 							],
 							"query": [
 								{
@@ -192,6 +259,164 @@
 								{
 									"key": "token",
 									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lists",
+			"item": [
+				{
+					"name": "Create new List(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//uesd variables\r",
+									"var responseBody=pm.response.json();\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/*Verify the following keys exist in the response\r",
+									" *  id\r",
+									"    name\r",
+									"    idBoard\r",
+									" */\r",
+									"pm.test(\"verify that id key exist in response\", function () {\r",
+									"    pm.expect(responseBody).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"verify that idBoard key exist in response\", function () {\r",
+									"    pm.expect(responseBody).to.have.property('idBoard');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"verify that name key exist in response\", function () {\r",
+									"    pm.expect(responseBody).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"//verify the value of close is false or not \r",
+									"pm.test(\"verify the value of close\", function () {\r",
+									"    pm.expect(responseBody.closed).to.be.eql(false);\r",
+									"});\r",
+									"\r",
+									"//verify that limits object is empt \r",
+									"pm.test(\"verify the value of limits object\", function () {\r",
+									"    pm.expect(responseBody.limits).to.be.eql({});\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/lists?name=backlog&idBoard={{LastBoardID}}&key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "backlog"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{LastBoardID}}"
+								},
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive or un-archive a list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//uesd variables\r",
+									"var responseBody=pm.response.json();\r",
+									"var headerBody=pm.response.headers.get(\"Set-Cookie\");\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//verify the  \"value\" should be exist and true if archive or false if unarchive \r",
+									"pm.test(\"verify the  value should be exist\", function () {\r",
+									"    pm.expect(responseBody).to.have.property(\"closed\");\r",
+									"    pm.expect(responseBody.closed).to.be.eql(false);\r",
+									"});\r",
+									"\r",
+									"//Response Headers should include a key called \"Set-Cookie\"\r",
+									"pm.test(\"verify set-Cookie\", function () {\r",
+									"    pm.expect(headerBody).to.contain(\"isEnterpriseAdmin%3Dfalse\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/lists/{{FirstListID}}/closed?key={{key}}&token={{token}}&value=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"lists",
+								"{{FirstListID}}",
+								"closed"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "value",
+									"value": "false"
 								}
 							]
 						}
