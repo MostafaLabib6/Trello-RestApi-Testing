@@ -242,14 +242,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/1/boards/{{FirstBoardID}}?key={{key}}&token={{token}}",
+							"raw": "{{baseUrl}}/1/boards/{{LastBoardID}}?key={{key}}&token={{token}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"1",
 								"boards",
-								"{{FirstBoardID}}"
+								"{{LastBoardID}}"
 							],
 							"query": [
 								{
@@ -327,7 +327,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/1/lists?name=backlog&idBoard={{LastBoardID}}&key={{key}}&token={{token}}",
+							"raw": "{{baseUrl}}/1/lists?name=cards&idBoard={{FirstBoardID}}&key={{key}}&token={{token}}",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -338,11 +338,11 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "backlog"
+									"value": "cards"
 								},
 								{
 									"key": "idBoard",
-									"value": "{{LastBoardID}}"
+									"value": "{{FirstBoardID}}"
 								},
 								{
 									"key": "key",
@@ -417,6 +417,221 @@
 								{
 									"key": "value",
 									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cards",
+			"item": [
+				{
+					"name": "Create a new Card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//used variables\r",
+									"var responseBody=pm.response.json();\r",
+									"var cardID=responseBody.id;\r",
+									"pm.environment.set(\"cardID\", cardID);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"varify comments to be eql 0\",()=>{\r",
+									"    pm.expect(responseBody.badges.comments).to.be.equal(0);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/1/cards/?idList={{FirstListID}}&name=fake&pos=top&due=11/16/2023&dueComplete=true&key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								""
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{FirstListID}}"
+								},
+								{
+									"key": "name",
+									"value": "fake"
+								},
+								{
+									"key": "pos",
+									"value": "top"
+								},
+								{
+									"key": "due",
+									"value": "11/16/2023"
+								},
+								{
+									"key": "dueComplete",
+									"value": "true"
+								},
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Card(s)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/cards/{{cardID}}?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{cardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/cards/{{cardID}}?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{cardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a Card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/1/cards/{{cardID}}?key={{key}}&token={{token}}&due=10/5/2029",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								"{{cardID}}"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "due",
+									"value": "10/5/2029"
 								}
 							]
 						}
